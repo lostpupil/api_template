@@ -12,5 +12,5 @@ This is a api template build upon Cuba and Grape.
 ## Reference
 
 [cuba](https://github.com/soveran/cuba)    
-[grape](https://github.com/ruby-grape/grape)
+[grape](https://github.com/ruby-grape/grape)    
 [grape-swagger](https://github.com/ruby-grape/grape-swagger)
