@@ -11,7 +11,12 @@ class API < Grape::API
   mount ::Hello::V1
   mount ::Hello::V2
 
-  add_swagger_documentation
+  add_swagger_documentation info: {
+    title: "API Documentation",
+    contact_name: "Pink Banana",
+    contact_email: "ufozhengli@163.com",
+    contact_url: "https://www.evilbanana.cn",
+  }
 end
 
 Cuba.define do
