@@ -7,7 +7,7 @@ gem 'rack-protection'
 
 gem 'cuba'
 gem 'cutest'
-
+gem 'tilt'
 gem 'grape'
 gem 'grape-swagger'
 

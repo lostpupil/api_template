@@ -18,4 +18,8 @@ Cuba.define do
   on 'api' do
     run API
   end
+
+  on 'swagger' do
+    res.write partial 'swagger/index'
+  end
 end
