@@ -22,12 +22,18 @@ visit something like `/swagger`
 ## Reference
 
 ### API
+
 [cuba](https://github.com/soveran/cuba)    
 [grape](https://github.com/ruby-grape/grape)    
 [grape-swagger](https://github.com/ruby-grape/grape-swagger)
 
 ### Deploy
+
 [puma](https://github.com/puma/puma)    
 [mina](https://github.com/mina-deploy/mina)    
 [mina-puma](https://github.com/untitledkingdom/mina-puma)    
+
+### Database
+
+[sequel](https://github.com/jeremyevans/sequel)    
 
