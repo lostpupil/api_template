@@ -6,5 +6,6 @@ require "cuba/render"
 Cuba.plugin Cuba::Render
 Cuba.settings[:render][:views] = "./app/views/"
 
+Dir["./app/helpers/*.rb"].each { |file| require file }
 Dir["./app/apis/*/*.rb"].each { |file| require file }
 Dir["./app/apis/*.rb"].each { |file| require file }
