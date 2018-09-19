@@ -10,6 +10,8 @@ class API < Grape::API
 
   mount ::Hello::V1
   mount ::Hello::V2
+
+  add_swagger_documentation
 end
 
 Cuba.define do
