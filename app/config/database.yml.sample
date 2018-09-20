@@ -2,7 +2,7 @@ development:
   adapter: mysql2
   host: localhost
   port: 3306
-  database: api_template_development
+  database: 
   username: root
   password: 
   max_connections: 10

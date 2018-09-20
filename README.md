@@ -37,3 +37,8 @@ visit something like `/swagger`
 
 [sequel](https://github.com/jeremyevans/sequel)    
 
+Init a development database
+
+```sql
+CREATE DATABASE `api_template_development` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
