@@ -24,7 +24,7 @@ def console(rack_env)
 end
 
 def get_database_config
-  @database_config = YAML.load_file('./app/config/database.yml')
+  @database_config = YAML.load_file('./config/database.yml')
   @db = Sequel.connect(@database_config["#{ENV['RACK_ENV']}"])
   Sequel.extension :migration, :core_extensions
 end

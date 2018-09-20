@@ -13,6 +13,8 @@ Sequel::Model.plugin :timestamps, create: :created_at, update: :updated_at
 Cuba.plugin Cuba::Render
 Cuba.settings[:render][:views] = "./app/views/"
 
+Dir["./app/models/*.rb"].each { |file| require file }
+
 Dir["./app/helpers/*.rb"].each { |file| require file }
 Dir["./app/apis/*/*.rb"].each { |file| require file }
 Dir["./app/apis/*.rb"].each { |file| require file }
