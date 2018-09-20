@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'bundler/setup'
+require 'yaml'
 Bundler.require(:default, ENV["RACK_ENV"] || 'development')
 require "cuba/render"
 

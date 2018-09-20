@@ -11,7 +11,7 @@ task :server do
 end
 
 task :test do
-  exec "cutest test/**/*.rb"
+  exec "export RACK_ENV=test && cutest test/**/*.rb"
 end
 
 def console(rack_env)
@@ -30,7 +30,7 @@ def get_database_config
 end
 
 def database(rack_env)
-
+  short = 'test' if rack_env == 'test'
   short = 'dev' if rack_env == 'development'
   short = 'prod' if rack_env == 'production'
   namespace :db do
@@ -74,6 +74,11 @@ def database(rack_env)
   end
 end
 
+namespace :test do
+  console('test')
+  database('test')
+end
+
 namespace :dev do
   console('development')
   database('development')
@@ -81,5 +86,6 @@ end
 
 namespace :prod do
   console('production')
+  ## uncomment this line will add production database operation to your script
   # database('production')
 end
