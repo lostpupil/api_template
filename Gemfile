@@ -24,3 +24,8 @@ end
 
 gem 'puma'
 gem 'pry'
+
+# database
+
+gem 'mysql2'
+gem "sequel"

@@ -1,0 +1,16 @@
+development:
+  adapter: mysql2
+  host: localhost
+  port: 3306
+  database: 
+  username: root
+  password: 
+  max_connections: 10
+production: 
+  adapter: mysql2
+  host: 
+  port: 3306
+  database: 
+  username: 
+  password: 
+  max_connections: 
