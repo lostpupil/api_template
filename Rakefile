@@ -30,17 +30,44 @@ def get_database_config
 end
 
 def database(rack_env)
-  ENV['RACK_ENV'] = rack_env
-  
   namespace :db do
-    desc "Prints current schema version in #{rack_env}"
+    desc "Prints current schema version. #{rack_env}"
     task :version do
+      ENV['RACK_ENV'] = rack_env
       get_database_config
       version = if @db.tables.include?(:schema_info)
         @db[:schema_info].first[:version]
       end || 0
       puts "Schema Version: #{version}"
     end
+
+    desc "Perform migration up to latest migration available. #{rack_env}"
+    task :migrate do
+      ENV['RACK_ENV'] = rack_env
+      get_database_config
+      Sequel::Migrator.run(DBM, "db/migrations")
+      Rake::Task['db:version'].execute
+      Rake::Task['db:schema'].execute
+    end
+
+    desc "Perform rollback to specified target or full rollback as default. #{rack_env}"
+    task :rollback, :target do |t, args|
+      ENV['RACK_ENV'] = rack_env
+      get_database_config
+      args.with_defaults(:target => 0)
+      Sequel::Migrator.run(dbm, "db/migrations", :target => args[:target].to_i)
+      Rake::Task['db:version'].execute
+    end
+
+    desc "Perform migration reset (full rollback and migration). #{rack_env}"
+    task :reset do
+      ENV['RACK_ENV'] = rack_env
+      get_database_config
+      Sequel::Migrator.run(dbm, "db/migrations", :target => 0)
+      Sequel::Migrator.run(dbm, "db/migrations")
+      Rake::Task['db:version'].execute
+    end
+
   end
 end
 
