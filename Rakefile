@@ -34,14 +34,13 @@ def database(rack_env)
   short = 'dev' if rack_env == 'development'
   short = 'prod' if rack_env == 'production'
   ENV['RACK_ENV'] = rack_env
+  get_database_config
   namespace :db do
     desc "Generate Schema text file. "
     task :schema do
       
-      get_database_config
       File.open("db/schema.txt", "w") do |writeable|
         Dir.glob("app/models/*").each.with_index do |file, idx|
-          ap file
           require_relative file
           model_name = file.split("\/").last.split('.').first
           if model_name.include?("_")
@@ -65,7 +64,6 @@ def database(rack_env)
 
     desc "Prints current schema version. "
     task :version do
-      get_database_config
       version = if @db.tables.include?(:schema_info)
         @db[:schema_info].first[:version]
       end || 0
@@ -74,7 +72,6 @@ def database(rack_env)
 
     desc "Perform migration up to latest migration available. "
     task :migrate do
-      get_database_config
       Sequel::Migrator.run(@db, "db/migrations")
       Rake::Task["#{short}:db:version"].execute
       # Rake::Task["#{short}:db:schema"].execute
@@ -82,7 +79,6 @@ def database(rack_env)
 
     desc "Perform rollback to specified target or full rollback as default. "
     task :rollback, :target do |t, args|
-      get_database_config
       args.with_defaults(:target => 0)
       Sequel::Migrator.run(@db, "db/migrations", :target => args[:target].to_i)
       Rake::Task["#{short}:db:version"].execute
@@ -90,7 +86,6 @@ def database(rack_env)
 
     desc "Perform migration reset (full rollback and migration). "
     task :reset do
-      get_database_config
       Sequel::Migrator.run(@db, "db/migrations", :target => 0)
       Sequel::Migrator.run(@db, "db/migrations")
       Rake::Task["#{short}:db:version"].execute
