@@ -35,10 +35,38 @@ def database(rack_env)
   short = 'prod' if rack_env == 'production'
   ENV['RACK_ENV'] = rack_env
   get_database_config
+
   namespace :db do
+    desc "Generate migration"
+    task :generate, :source do |t, args|
+      name = args[:source]
+      f_count = Dir.glob("./db/migrations/*").count
+
+      version = if @db.tables.include?(:schema_info)
+        @db[:schema_info].first[:version]
+      end || 0
+
+      action, tbl = name.split('_')
+      begin
+
+        template = Tilt.new("./db/templates/#{action}.str").render Object.new, tbl: tbl
+        puts "More info at https://github.com/jeremyevans/sequel/blob/master/doc/schema_modification.rdoc"
+        if f_count == version
+          f_name = "#{version + 1}_#{name}.rb"
+          File.open("./db/migrations/#{f_name}", "w") do |f|
+            f.write tpl
+          end
+        else
+          puts "Invalid file count in migrations."
+        end
+      rescue Exception => e
+        puts "Invalid action: #{action}"
+      end
+
+    end
+
     desc "Generate Schema text file. "
     task :schema do
-      
       File.open("db/schema.txt", "w") do |writeable|
         Dir.glob("app/models/*").each.with_index do |file, idx|
           require_relative file
