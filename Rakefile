@@ -77,14 +77,14 @@ def database(rack_env)
             model_name = model_name.capitalize
           end
           writeable << model_name + "\n"
-          writeable << "==================================================\n"
+          writeable << "=".cycle(50) + "\n" 
           Object.const_get(model_name).db_schema.each do |k,v|
             writeable << "#{k.to_s.ljust(20, ' ')}#{v[:db_type].to_s.rjust(30, ' ')}\n"
           end
           if Dir.glob("app/models/*").count == idx + 1
-            writeable << "--------------------------------------------------"
+            writeable "-".cycle(50)
           else
-            writeable << "--------------------------------------------------\n\n"
+            writeable << "=".cycle(50) + "\n" 
           end
         end
       end
