@@ -19,6 +19,16 @@ There are several rake tasks which can make you happy :)
 
 visit something like `/swagger`
 
+### Database
+
+[sequel](https://github.com/jeremyevans/sequel)    
+
+Init a development database
+
+```sql
+CREATE DATABASE `api_template_development` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
 ## Reference
 
 ### API
@@ -33,12 +43,4 @@ visit something like `/swagger`
 [mina](https://github.com/mina-deploy/mina)    
 [mina-puma](https://github.com/untitledkingdom/mina-puma)    
 
-### Database
 
-[sequel](https://github.com/jeremyevans/sequel)    
-
-Init a development database
-
-```sql
-CREATE DATABASE `api_template_development` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-```
