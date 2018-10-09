@@ -73,15 +73,11 @@ def database
             model_name = model_name.capitalize
           end
           writeable << model_name + "\n"
-          writeable << "=".cycle(50) + "\n" 
+          writeable << ["="].cycle(50).to_a.join + "\n"
           Object.const_get(model_name).db_schema.each do |k,v|
             writeable << "#{k.to_s.ljust(20, ' ')}#{v[:db_type].to_s.rjust(30, ' ')}\n"
           end
-          if Dir.glob("app/models/*").count == idx + 1
-            writeable "-".cycle(50)
-          else
-            writeable << "=".cycle(50) + "\n" 
-          end
+          writeable << ["-"].cycle(50).to_a.join + "\n\n"
         end
       end
     end
@@ -98,7 +94,7 @@ def database
     task :migrate do
       Sequel::Migrator.run(@db, "db/migrations")
       Rake::Task["db:version"].execute
-      # Rake::Task["db:schema"].execute
+      Rake::Task["db:schema"].execute
     end
 
     desc "Perform rollback to specified target or full rollback as default. "
@@ -120,4 +116,3 @@ end
 
 console()
 database()
-
