@@ -7,7 +7,7 @@ require "cuba/render"
 # Load database.yml
 DATABASE_CONFIG = YAML.load_file('./config/database.yml')
 
-DB = Sequel.connect(DATABASE_CONFIG["#{ENV['RACK_ENV']}"])
+DB = Sequel.connect(DATABASE_CONFIG["#{ENV["RACK_ENV"] || 'development'}"])
 # # setup database extensions
 Sequel::Model.plugin :timestamps, create: :created_at, update: :updated_at
 

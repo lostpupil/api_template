@@ -7,33 +7,29 @@ task default: %w{server}
 
 desc "start dev server"
 task :server do
-  exec "shotgun --server=puma --port=3000 config.ru"
+  exec "export RACK_ENV=development && shotgun --server=thin --port=3000 config.ru"
 end
 
 task :test do
   exec "export RACK_ENV=test && cutest test/**/*.rb"
 end
 
-def console(rack_env)
-  desc "start #{rack_env} console"
+def console
+  desc "start console"
   task :console do
-    ENV['RACK_ENV'] = rack_env
     require './app'
     Pry.start
   end
 end
 
 def get_database_config
+  rack_env = ENV['RACK_ENV'] || "development"
   @database_config = YAML.load_file('./config/database.yml')
-  @db = Sequel.connect(@database_config["#{ENV['RACK_ENV']}"])
+  @db = Sequel.connect(@database_config[rack_env])
   Sequel.extension :migration, :core_extensions
 end
 
-def database(rack_env)
-  short = 'test' if rack_env == 'test'
-  short = 'dev' if rack_env == 'development'
-  short = 'prod' if rack_env == 'production'
-  ENV['RACK_ENV'] = rack_env
+def database
   get_database_config
 
   namespace :db do
@@ -54,7 +50,7 @@ def database(rack_env)
         if f_count == version
           f_name = "#{version + 1}_#{name}.rb"
           File.open("./db/migrations/#{f_name}", "w") do |f|
-            f.write tpl
+            f.write template
           end
         else
           puts "Invalid file count in migrations."
@@ -101,34 +97,27 @@ def database(rack_env)
     desc "Perform migration up to latest migration available. "
     task :migrate do
       Sequel::Migrator.run(@db, "db/migrations")
-      Rake::Task["#{short}:db:version"].execute
-      # Rake::Task["#{short}:db:schema"].execute
+      Rake::Task["db:version"].execute
+      # Rake::Task["db:schema"].execute
     end
 
     desc "Perform rollback to specified target or full rollback as default. "
     task :rollback, :target do |t, args|
       args.with_defaults(:target => 0)
       Sequel::Migrator.run(@db, "db/migrations", :target => args[:target].to_i)
-      Rake::Task["#{short}:db:version"].execute
+      Rake::Task["db:version"].execute
     end
 
     desc "Perform migration reset (full rollback and migration). "
     task :reset do
       Sequel::Migrator.run(@db, "db/migrations", :target => 0)
       Sequel::Migrator.run(@db, "db/migrations")
-      Rake::Task["#{short}:db:version"].execute
+      Rake::Task["db:version"].execute
     end
 
   end
 end
 
-namespace :dev do
-  console('development')
-  database('development')
-end
+console()
+database()
 
-namespace :prod do
-  console('production')
-  ## uncomment this line will add production database operation to your script
-  # database('production')
-end
