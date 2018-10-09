@@ -122,11 +122,6 @@ def database(rack_env)
   end
 end
 
-namespace :test do
-  console('test')
-  database('test')
-end
-
 namespace :dev do
   console('development')
   database('development')
